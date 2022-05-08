@@ -97,6 +97,7 @@
     <None Include="edmx\ImportDataEntities.edmx.diagram">
       <DependentUpon>ImportDataEntities.edmx</DependentUpon>
     </None>
+    <None Include="Imports.bak" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
