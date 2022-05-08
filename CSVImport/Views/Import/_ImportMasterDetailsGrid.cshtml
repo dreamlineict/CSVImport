@@ -1,0 +1,62 @@
+﻿@using CSVImport.DAL.Models;
+@model ImportMasterDetailViewModel
+@{
+
+    <style type="text/css">
+        .Yellow {
+            color: yellow;
+        }
+
+        .Green {
+            color: green;
+        }
+
+        .Blue {
+            color: blue;
+        }
+        .Normal
+        {
+            font-weight: normal;
+        }
+    </style>
+}
+<h4>Detail Grid - @Model.AccountNumber</h4>
+@(Html
+    .Grid(Model.ImportMasterDetails)
+    .Build(columns =>
+    {
+        columns.Add(model => model.TransactionDate).Titled("Transaction Date").Formatted("{0:yyyy-MM-dd}");
+        columns.Add(model => model.Amount).Encoded(true).Titled("Amount").RenderedAs(o => CustomRenderingOfColumn(o, true));
+        columns.Add(model => model.Status).Titled("Status");
+        columns.Add(model => model.EffectiveStatusDate).Titled("Effective Status Date").Formatted("{0:yyyy-MM-dd}");
+        columns.Add(model => model.TimeBreached).Encoded(true).Titled("TimeBreached").RenderedAs(o => CustomRenderingOfColumn(o, false));
+    }).Filterable().Sortable()
+    .Empty("No data found")
+    .Filterable()
+)
+
+@helper CustomRenderingOfColumn(ImportMasterDetailModel customer, bool flag)
+{
+    if (!flag)
+    {
+        if (((DateTime)customer.EffectiveStatusDate - (DateTime)customer.TransactionDate).TotalDays >= 7)
+        {
+            <label class="Yellow">Yes</label>
+        }
+        else
+        {
+            <label class="Green">No</label>
+        }
+    }
+    else
+    {
+        if (customer.Amount > 500)
+        {
+            <label class="Blue">@customer.Amount</label>
+        }
+        else
+        {
+            <label class="Normal">@customer.Amount</label>
+        }
+    }
+}

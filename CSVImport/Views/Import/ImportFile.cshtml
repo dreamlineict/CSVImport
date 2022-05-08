@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "ImportFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <script type="text/javascript">
+        jQuery(function () {
+            $("#btnUpload").click(function (e)
+            {
+                var fileName = $("#postedFile").val();
+
+                if (fileName) {
+                    return true;
+                }
+                else {
+                    alertify.alert("Please select a file");
+                    return false;
+                }
+            });
+        });
+    </script>
+}
+
+<h4>Import Uploader</h4>
+
+@using (Html.BeginForm("ImportFile", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="file" id="postedFile" name="postedFile" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="submit" id="btnUpload" value="Upload" class="btn btn-success" />
+        </div>
+    </div>
+}
+
+@if (ViewBag.Result != null)
+{
+    <script>
+        jQuery(function ($) {
+            alertify.alert('@ViewBag.Result');
+        });
+    </script>
+}

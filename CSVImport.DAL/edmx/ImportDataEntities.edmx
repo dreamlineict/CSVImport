@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ImportsEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ImportData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PaymentID" Type="int" Nullable="false" />
+          <Property Name="AccountHolder" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BranchCode" Type="int" Nullable="false" />
+          <Property Name="AccountNumber" Type="bigint" Nullable="false" />
+          <Property Name="AccountType" Type="int" Nullable="false" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="int" />
+          <Property Name="EffectiveStatusDate" Type="datetime" />
+        </EntityType>
+        <Function Name="usp_ImportMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="usp_ImportMaster_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AccountNumber" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="usp_ImportReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="usp_UpdateAccountTypeForAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AccountNumber" Type="bigint" Mode="In" />
+          <Parameter Name="AccountType" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ImportsEntitiesStoreContainer">
+          <EntitySet Name="ImportData" EntityType="Self.ImportData" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ImportsEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ImportsContext" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="usp_ImportMaster" ReturnType="Collection(ImportsEntities.usp_ImportMaster_Result)" />
+          <FunctionImport Name="usp_ImportMaster_Details" ReturnType="Collection(ImportsEntities.usp_ImportMaster_Details_Result)">
+          <Parameter Name="AccountNumber" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="usp_ImportReport" ReturnType="Collection(ImportsEntities.usp_ImportReport_Result)" />
+          <EntitySet Name="ImportDatas" EntityType="ImportsEntities.ImportData" />
+          <FunctionImport Name="usp_UpdateAccountTypeForAccount">
+            <Parameter Name="AccountNumber" Mode="In" Type="Int64" />
+            <Parameter Name="AccountType" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="usp_ImportMaster_Result">
+          <Property Type="String" Name="AccountHolder" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="BranchCode" Nullable="false" />
+          <Property Type="Int64" Name="AccountNumber" Nullable="false" />
+          <Property Type="String" Name="AccountType" Nullable="false" MaxLength="7" />
+        </ComplexType>
+        <ComplexType Name="usp_ImportMaster_Details_Result">
+          <Property Type="DateTime" Name="TransactionDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="EffectiveStatusDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TimeBreached" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="usp_ImportReport_Result">
+          <Property Type="Int32" Name="BranchCode" Nullable="false" />
+          <Property Type="String" Name="AccountType" Nullable="false" MaxLength="7" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="TotalCount" Nullable="true" />
+          <Property Type="Decimal" Name="TotalAmount" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <EntityType Name="ImportData">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="PaymentID" Type="Int32" Nullable="false" />
+          <Property Name="AccountHolder" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchCode" Type="Int32" Nullable="false" />
+          <Property Name="AccountNumber" Type="Int64" Nullable="false" />
+          <Property Name="AccountType" Type="Int32" Nullable="false" />
+          <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="EffectiveStatusDate" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ImportsEntitiesStoreContainer" CdmEntityContainer="ImportsContext">
+          <FunctionImportMapping FunctionImportName="usp_ImportMaster" FunctionName="ImportsEntities.Store.usp_ImportMaster">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ImportsEntities.usp_ImportMaster_Result">
+                <ScalarProperty Name="AccountHolder" ColumnName="AccountHolder" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_ImportMaster_Details" FunctionName="ImportsEntities.Store.usp_ImportMaster_Details">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ImportsEntities.usp_ImportMaster_Details_Result">
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EffectiveStatusDate" ColumnName="EffectiveStatusDate" />
+                <ScalarProperty Name="TimeBreached" ColumnName="TimeBreached" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_ImportReport" FunctionName="ImportsEntities.Store.usp_ImportReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ImportsEntities.usp_ImportReport_Result">
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ImportDatas">
+            <EntityTypeMapping TypeName="ImportsEntities.ImportData">
+              <MappingFragment StoreEntitySet="ImportData">
+                <ScalarProperty Name="EffectiveStatusDate" ColumnName="EffectiveStatusDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="AccountHolder" ColumnName="AccountHolder" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_UpdateAccountTypeForAccount" FunctionName="ImportsEntities.Store.usp_UpdateAccountTypeForAccount" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

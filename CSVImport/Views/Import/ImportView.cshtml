@@ -1,0 +1,59 @@
+﻿@using CSVImport.DAL.Models;
+@model ImportMasterDetailViewModel
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $(".anchorDetail").click(function () {
+                var $buttonClicked = $(this);
+                var accountNumber = $buttonClicked.attr('data-AccountNumber');
+
+                var MasterDetailsUrl = '@Url.Action("ImportView")';
+
+                $.ajax({
+                    type: "GET",
+                    url: MasterDetailsUrl,
+                    data: { AccountNumber: accountNumber },
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {                        
+                        if (data.Valid) {
+                            $("div#result").html(data.PartialView);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<h2>Master Grid</h2>
+@(Html
+    .Grid(Model.ImportMasters)
+    .Build(columns =>
+    {
+        columns.Add().Encoded(false).RenderedAs(c => @Html.ActionLink("Edit", "EditMaster", new { AccountNumber = c.AccountNumber }));
+        columns.Add(model => model.AccountHolder).Titled("Account Holder");
+        columns.Add(model => model.BranchCode).Titled("Branch Code");
+        columns.Add(c => c.AccountNumber).Titled("Account Number").Encoded(false).RenderedAs(o => new HtmlString
+        (
+            "<a href='javascript:void(0);' class='anchorDetail' data-AccountNumber='" + o.AccountNumber + "'>" + o.AccountNumber + "</a>"
+        ));
+        columns.Add(model => model.AccountType).Titled("Account Type");
+    }).Filterable().Sortable()
+    .Empty("No data found")
+    .Filterable()
+)
+
+<div class="row">
+    <div class="col-sm-12">
+        <hr />
+        <br />
+        <div id="result">
+        </div>
+    </div>
+</div>

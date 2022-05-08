@@ -1,0 +1,21 @@
+﻿@using CSVImport.DAL.Models;
+@model IEnumerable<ReportModel>
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Import Report</h2>
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(model => model.BranchCode).Titled("Branch Code");
+        columns.Add(model => model.AccountType).Titled("Account Type");
+        columns.Add(model => model.Status).Titled("Status");
+        columns.Add(model => model.TotalCount).Titled("TotalCount");
+        columns.Add(model => model.TotalAmount).Titled("Total Amount");
+    }).Filterable().Sortable()
+    .Empty("No data found")
+    .Filterable()
+)

@@ -1,0 +1,79 @@
+﻿@using CSVImport.DAL.edmx;
+@model ImportData
+
+@{
+    ViewBag.Title = "EditMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("EditMaster", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapsefour">
+                    <b>Edit Master Record</b>
+                </a>
+            </h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    Account Holder:
+                </div>
+                <div class="col-sm-2">
+                    @Html.HiddenFor(model => model.AccountNumber)
+                    @Html.DisplayFor(model => model.AccountHolder)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Branch Code:
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.BranchCode)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Account Number:
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.AccountNumber)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Account Type:
+                </div>
+                <div class="col-sm-10">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-10">
+                    @Html.DropDownListFor(model => model.AccountType, new SelectList((IEnumerable<SelectListItem>)ViewBag.AccountTypes, "Value", "Text"), new { id = "ddlAccountTypes", @class = "form-control" })
+                </div>
+            </div>            
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-10">
+                    <input type="submit" name="submitButton" value="Save" class="btn btn-info" />
+                    @Html.ActionLink("Close", "ImportView", "Import", null, new { @class = "btn btn-danger btn-large" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.Result != null)
+{
+    <script>
+        jQuery(function ($) {
+            alertify.alert('@ViewBag.Result');
+        });
+    </script>
+}
